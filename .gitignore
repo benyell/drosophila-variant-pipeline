@@ -1,0 +1,28 @@
+# --- Data Files (Too large for GitHub) ---
+data/raw/
+data/ref/
+*.fastq
+*.fastq.gz
+*.fa
+*.fasta
+*.fai
+
+# --- Intermediate Mapping Files (Massive Binary files) ---
+results/vcf/*.bam
+results/vcf/*.bam.bai
+results/vcf/*.sam
+*.amb
+*.ann
+*.bwt
+*.pac
+*.sa
+
+# --- Snakemake & System Files ---
+.snakemake/
+__pycache__/
+.DS_Store
+*.log
+
+# --- Large VCFs (Keep only small filtered ones if possible) ---
+# We keep the small 'final' summaries, but ignore the large 'raw' ones
+results/vcf/*_raw.vcf
