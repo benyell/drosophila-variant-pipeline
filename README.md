@@ -19,7 +19,7 @@ The expected result is a statistically validated set of biological markers that 
 
     * Indels: The insertion or deletion of small segments of DNA.
 
-    <img src="results/Result.png" alt="Variation" width="300" />
+    <img src="results/Result.png" alt="Variation" />
 
 * Alignment (Mapping): The process of comparing millions of short DNA fragments (Reads) against the reference genome to identify mismatches that indicate potential variants.
 
@@ -89,14 +89,16 @@ The expected result is a statistically validated set of biological markers that 
       <p>Variants found </p>
     </td>
     <td>
-      <img src="results/pipeline_logic.png" alt="Snake DAG" width="300" />
-      <p>DAG Pipeline </p>
-    </td>
-    <td>
       <img src="results/Snakefile execution.png" alt="Snake DAG" width="300" />
       <p>DAG Pipeline </p>
     </td>
   </tr>
+  <tr>
+    <td>
+      <img src="results/pipeline_logic.png" alt="Snake DAG" width="300" />
+      <p>DAG Pipeline </p>
+    </td>
+   </tr>
 </table>
 
 * Hard Filtering: To eliminate sequencing artifacts, the pipeline applied a final filtering rule:
@@ -131,17 +133,17 @@ The expected result is a statistically validated set of biological markers that 
     </td>
     <td>
       <img src="results/insights/genomic_insights_report2.png" alt="Real" width="300" />
-      <p> Geonomic insights on Real test data 50,000 size</p>
+      <p> Geonomic insights on Real test data 50,000 reads</p>
     </td>
   </tr>
   <tr>
     <td>
       <img src="results/insights/genomic_insights_report4.png" alt="Real" width="300" />
-      <p> Geonomic insights on Real test data 500,000 size </p>
+      <p> Geonomic insights on Real test data 203,445 reads </p>
     </td>
     <td>
       <img src="results/insights/genomic_insights_report3.png" alt="Real Filtered" width="300" />
-      <p> Filtered Geonomic insights on Real test data 500,000 size</p>
+      <p> Filtered Geonomic insights on Real test data 203,445 reads</p>
     </td>
   </tr>
 </table>
