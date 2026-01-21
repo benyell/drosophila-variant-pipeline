@@ -19,7 +19,6 @@ rule align:
         "bwa mem -t {threads} {input.ref} {input.r1} {input.r2} 2> {log} | "
         "samtools view -Sb - | samtools sort -o {output.bam}"
 
-# NEW RULE: Generate explicit mapping stats for MultiQC
 rule bam_stats:
     input:
         bam="results/vcf/{sample}.bam"
@@ -58,7 +57,6 @@ rule filter_variants:
 rule multiqc:
     input:
         vcf=expand("results/vcf/{sample}_filtered.vcf", sample=SAMPLES),
-        # MultiQC will now see the .stats and .flagstat files
         bam_stats=expand("results/qc/{sample}.stats", sample=SAMPLES),
         flagstat=expand("results/qc/{sample}.flagstat", sample=SAMPLES),
         bwa_log=expand("results/qc/{sample}_bwa_mem.log", sample=SAMPLES),
@@ -66,5 +64,4 @@ rule multiqc:
     output:
         "results/qc/multiqc_report.html"
     shell:
-        # We point MultiQC to the results/qc/ directory where the new .stats files live
         "multiqc results/qc/ -o results/qc/ --force"
