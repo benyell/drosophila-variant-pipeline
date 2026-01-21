@@ -22,7 +22,10 @@ results/vcf/*.sam
 __pycache__/
 .DS_Store
 *.log
+results/qc/*.stats
+results/qc/*.flagstat
 
 # --- Large VCFs (Keep only small filtered ones if possible) ---
 # We keep the small 'final' summaries, but ignore the large 'raw' ones
 results/vcf/*_raw.vcf
+results/qc/multiqc_data/

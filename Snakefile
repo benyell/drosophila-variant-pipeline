@@ -1,9 +1,7 @@
-# Updated Drosophila Variant Discovery Pipeline
 SAMPLES = ["sample"]
 
 rule all:
     input:
-        # Target the FILTERED VCF now
         expand("results/vcf/{sample}_filtered.vcf", sample=SAMPLES),
         "results/qc/multiqc_report.html"
 
@@ -14,10 +12,23 @@ rule align:
         r2="data/raw/{sample}_R2.fastq"
     output:
         bam="results/vcf/{sample}.bam"
+    log:
+        "results/qc/{sample}_bwa_mem.log"
     threads: 16
     shell:
-        "bwa mem -t {threads} {input.ref} {input.r1} {input.r2} | "
+        "bwa mem -t {threads} {input.ref} {input.r1} {input.r2} 2> {log} | "
         "samtools view -Sb - | samtools sort -o {output.bam}"
+
+# NEW RULE: Generate explicit mapping stats for MultiQC
+rule bam_stats:
+    input:
+        bam="results/vcf/{sample}.bam"
+    output:
+        flagstat="results/qc/{sample}.flagstat",
+        stats="results/qc/{sample}.stats"
+    shell:
+        "samtools flagstat {input.bam} > {output.flagstat} && "
+        "samtools stats {input.bam} > {output.stats}"
 
 rule index_bam:
     input: "results/vcf/{sample}.bam"
@@ -30,25 +41,30 @@ rule call_variants:
         bam="results/vcf/{sample}.bam",
         bai="results/vcf/{sample}.bam.bai"
     output:
-        vcf="results/vcf/{sample}_raw.vcf" # Renamed to 'raw'
+        vcf="results/vcf/{sample}_raw.vcf"
+    log:
+        "results/qc/{sample}_freebayes.log"
     shell:
-        "freebayes -f {input.ref} {input.bam} > {output.vcf}"
+        "freebayes -f {input.ref} {input.bam} > {output.vcf} 2> {log}"
 
-# --- NEW: Phase 9 Filtering Rule ---
 rule filter_variants:
     input:
         vcf="results/vcf/{sample}_raw.vcf"
     output:
         filtered="results/vcf/{sample}_filtered.vcf"
     shell:
-        # Standard filters for Drosophila: 
-        # QUAL > 30 (99.9% accuracy) and DP > 10 (sufficient coverage)
         "vcffilter -f 'QUAL > 30 & DP > 10' {input.vcf} > {output.filtered}"
 
 rule multiqc:
     input:
-        expand("results/vcf/{sample}_filtered.vcf", sample=SAMPLES)
+        vcf=expand("results/vcf/{sample}_filtered.vcf", sample=SAMPLES),
+        # MultiQC will now see the .stats and .flagstat files
+        bam_stats=expand("results/qc/{sample}.stats", sample=SAMPLES),
+        flagstat=expand("results/qc/{sample}.flagstat", sample=SAMPLES),
+        bwa_log=expand("results/qc/{sample}_bwa_mem.log", sample=SAMPLES),
+        fb_log=expand("results/qc/{sample}_freebayes.log", sample=SAMPLES)
     output:
         "results/qc/multiqc_report.html"
     shell:
-        "multiqc results/ -o results/qc/ --force"
+        # We point MultiQC to the results/qc/ directory where the new .stats files live
+        "multiqc results/qc/ -o results/qc/ --force"

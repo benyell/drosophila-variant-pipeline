@@ -6,7 +6,7 @@ import io
 import os
 
 # --- PATHS ---
-VCF_PATH = "results/vcf/sample_filtered.vcf"
+VCF_PATH = "results/vcf/sample_raw.vcf"
 BAM_PATH = "results/vcf/sample.bam"
 OUTPUT_DIR = "results/insights"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -69,5 +69,5 @@ sns.scatterplot(data=df, x='POS', y='QUAL', alpha=0.5, ax=axes[1,1], color='oran
 axes[1,1].set_title("Variant Quality by Genomic Position")
 
 plt.tight_layout()
-plt.savefig(f"{OUTPUT_DIR}/genomic_insights_report3.png")
-print(f"Full Report Saved to: {OUTPUT_DIR}/genomic_insights_report3.png")
+plt.savefig(f"{OUTPUT_DIR}/genomic_insights_report4.png")
+print(f"Full Report Saved to: {OUTPUT_DIR}/genomic_insights_report4.png")
