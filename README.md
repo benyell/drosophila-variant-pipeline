@@ -95,7 +95,7 @@ The expected result is a statistically validated set of biological markers that 
   </tr>
   <tr>
     <td>
-      <img src="results/pipeline_logic.png" alt="Snake DAG" width="300" />
+      <img src="results/pipeline_logic.png" alt="Snake DAG" width="300" length="500" />
       <p>DAG Pipeline </p>
     </td>
    </tr>
